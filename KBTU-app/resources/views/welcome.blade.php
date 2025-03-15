@@ -1,6 +1,6 @@
 @extends('default_ui.header')
 
-@section('title', 'Home Page')
+@section('title', 'Dashboard Page')
 
 @push('styles')
     <style>
@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="welcome-block">
-        <h2>Welcome to the Home Page</h2>
+        <h2>Welcome to the Dashboard Page</h2>
         <p>This is the main content of the home page.</p>
     </div>
 @endsection

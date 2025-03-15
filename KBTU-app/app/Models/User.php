@@ -8,11 +8,13 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use HasFactory, Notifiable;
     protected $fillable = [
         'name',
         'email',
         'password',
         'status',
+        'role',
     ];
 
     protected $hidden = [
@@ -32,6 +34,10 @@ class User extends Authenticatable
     const STATUS_PENDING = 'pending';
     const STATUS_SUSPENDED = 'suspended';
     const STATUS_BANNED = 'banned';
+
+    const ROLE_USER = 'user';
+    const ROLE_MODERATOR = 'moderator';
+
     public function isActive(): bool
     {
         return $this->status === self::STATUS_ACTIVE;
@@ -45,5 +51,15 @@ class User extends Authenticatable
     public function scopeActive($query)
     {
         return $query->where('status', self::STATUS_ACTIVE);
+    }
+
+    public function isModerator(): bool
+    {
+        return $this->role === self::ROLE_MODERATOR;
+    }
+
+    public function isUser(): bool
+    {
+        return $this->role === self::ROLE_USER;
     }
 }

@@ -1,23 +1,23 @@
 <?php
 
-use App\Http\Middleware\CheckAccountStatus;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MainController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ArticleController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/about', [MainController::class, 'about']);
-Route::get('/home', [MainController::class, 'home']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+Route::resource('articles', ArticleController::class)->middleware('auth');
 
-Route::get('/profile', [UserController::class, 'profile'])->middleware(['auth', CheckAccountStatus::class])->name('profile');
+require __DIR__.'/auth.php';
